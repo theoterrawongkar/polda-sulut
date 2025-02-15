@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Employee;
+use App\Models\Attendance;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +15,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        Employee::factory(10)->create()->each(function ($employee, $index) {
+            $userData = [
+                'employee_id' => $employee->id,
+            ];
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+            if ($index === 0) {
+                $userData['name'] = 'admin';
+                $userData['email'] = 'admin@poldasulut.com';
+            }
+
+            User::factory()->create($userData);
+        });
+
+        Attendance::factory(20)->create();
     }
 }
