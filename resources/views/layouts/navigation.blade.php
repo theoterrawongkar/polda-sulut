@@ -36,8 +36,8 @@
         </div>
         <div>
             <h3 class="px-2 py-1 font-medium text-[#ffdd19]">Absensi</h3>
-            <a href="#"
-                class="{{ Request::routeIs('dashboard.reports.create') ? 'bg-gray-200 text-black animate-pulse' : 'text-white animate-none' }} flex gap-4 px-4 py-1.5 text-white rounded hover:bg-gray-200 hover:text-gray-900">
+            <a href="{{ route('dashboard.attendances.show') }}"
+                class="{{ Request::routeIs('dashboard.attendances.show') ? 'bg-gray-200 text-black animate-pulse' : 'text-white animate-none' }} flex gap-4 px-4 py-1.5 rounded hover:bg-gray-200 hover:text-gray-900">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -46,8 +46,8 @@
                 </svg>
                 <span class="inline">Lihat Presensi</span>
             </a>
-            <a href="#"
-                class="{{ Request::routeIs('dashboard.reports.received') ? 'bg-gray-200 text-black animate-pulse' : 'text-white animate-none' }} flex gap-4 px-4 py-1.5 text-white rounded hover:bg-gray-200 hover:text-gray-900">
+            <a href="{{ route('dashboard.attendances.create') }}"
+                class="{{ Request::routeIs('dashboard.attendances.create') ? 'bg-gray-200 text-black animate-pulse' : 'text-white animate-none' }} flex gap-4 px-4 py-1.5 text-white rounded hover:bg-gray-200 hover:text-gray-900">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"

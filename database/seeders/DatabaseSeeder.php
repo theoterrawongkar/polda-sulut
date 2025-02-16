@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Employee::factory(10)->create()->each(function ($employee, $index) {
+        Employee::factory(1)->create()->each(function ($employee, $index) {
             $userData = [
                 'employee_id' => $employee->id,
             ];
@@ -28,6 +28,6 @@ class DatabaseSeeder extends Seeder
             User::factory()->create($userData);
         });
 
-        Attendance::factory(20)->create();
+        // Attendance::factory(20)->create();
     }
 }

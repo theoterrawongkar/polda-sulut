@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EmployeeController;
+use App\Http\Controllers\Dashboard\AttendanceController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -22,4 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/karyawan/{nrp}/ubah', [EmployeeController::class, 'edit'])->name('dashboard.employees.edit');
     Route::put('/karyawan/{nrp}/ubah', [EmployeeController::class, 'update'])->name('dashboard.employees.update');
     Route::delete('/karyawan/{nrp}/hapus', [EmployeeController::class, 'destroy'])->name('dashboard.employees.delete');
+
+    Route::get('/absensi-saya', [AttendanceController::class, 'show'])->name('dashboard.attendances.show');
+    Route::get('/input-presensi', [AttendanceController::class, 'create'])->name('dashboard.attendances.create');
+    Route::post('/input-presensi', [AttendanceController::class, 'store'])->name('dashboard.attendances.store');
 });
