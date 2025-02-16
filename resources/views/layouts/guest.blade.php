@@ -9,7 +9,7 @@
     <meta name="description" content="Website Sistem Informasi Absensi Kepolisian Daerah Sulawesi Utara.">
 
     <!-- Logo Aplikasi -->
-    <link rel="icon" href="{{ asset('img/application-logo.webp') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('img/application-logo.png') }}" type="image/x-icon">
 
     <!-- Judul Halaman -->
     <title>Polda Sulut | {{ Str::limit($title, 20) }}</title>

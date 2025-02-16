@@ -24,8 +24,8 @@
                 </svg>
                 <span class="inline">Dashboard</span>
             </a>
-            <a href="#"
-                class="{{ Request::routeIs('dashboard.employees.*') ? 'bg-gray-200 text-black animate-pulse' : 'text-white animate-none' }} flex gap-4 px-4 py-1.5 text-white rounded hover:bg-gray-200 hover:text-gray-900">
+            <a href="{{ route('dashboard.employees.index') }}"
+                class="{{ Request::routeIs('dashboard.employees.*') ? 'bg-gray-200 text-black animate-pulse' : 'text-white animate-none' }} flex gap-4 px-4 py-1.5 rounded hover:bg-gray-200 hover:text-gray-900">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -55,28 +55,9 @@
                 </svg>
                 <span>Input Presensi</span>
             </a>
-            <a href="#"
-                class="{{ Request::routeIs('dashboard.reports.processed') ? 'bg-gray-200 text-black animate-pulse' : 'text-white animate-none' }} flex gap-4 px-4 py-1.5 text-white rounded hover:bg-gray-200 hover:text-gray-900">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M21.75 6.75a4.5 4.5 0 0 1-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 1 1-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 0 1 6.336-4.486l-3.276 3.276a3.004 3.004 0 0 0 2.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852Z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.867 19.125h.008v.008h-.008v-.008Z" />
-                </svg>
-                <span>Kelola Presensi</span>
-            </a>
         </div>
         <div>
             <h3 class="px-2 py-1 font-medium text-[#ffdd19]">Lainnya</h3>
-            <a href="#"
-                class="{{ Request::routeIs('dashboard.employees.show') ? 'bg-gray-200 text-black animate-pulse' : 'text-white animate-none' }} flex gap-4 px-4 py-1.5 text-white rounded hover:bg-gray-200 hover:text-gray-900">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                </svg>
-                <span class="inline">Data Anda</span>
-            </a>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button class="flex w-full gap-4 px-4 py-1.5 text-white rounded hover:bg-gray-200 hover:text-gray-900">

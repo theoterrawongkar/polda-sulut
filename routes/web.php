@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -13,4 +15,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/karyawan', [EmployeeController::class, 'index'])->name('dashboard.employees.index');
+    Route::get('/karyawan/tambah', [EmployeeController::class, 'create'])->name('dashboard.employees.create');
+    Route::post('/karyawan/tambah', [EmployeeController::class, 'store'])->name('dashboard.employees.store');
+    Route::get('/karyawan/{nrp}', [EmployeeController::class, 'show'])->name('dashboard.employees.show');
+    Route::get('/karyawan/{nrp}/ubah', [EmployeeController::class, 'edit'])->name('dashboard.employees.edit');
+    Route::put('/karyawan/{nrp}/ubah', [EmployeeController::class, 'update'])->name('dashboard.employees.update');
+    Route::delete('/karyawan/{nrp}/hapus', [EmployeeController::class, 'destroy'])->name('dashboard.employees.delete');
 });
