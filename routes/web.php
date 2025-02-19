@@ -26,4 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/absensi-saya', [AttendanceController::class, 'show'])->name('dashboard.attendances.show');
     Route::get('/input-presensi', [AttendanceController::class, 'create'])->name('dashboard.attendances.create');
     Route::post('/input-presensi', [AttendanceController::class, 'store'])->name('dashboard.attendances.store');
+    Route::get('/kelola-presensi', [AttendanceController::class, 'indexEmployeeAttendance'])->name('dashboard.attendances.indexEmployeeAttendance');
+    Route::get('/kelola-presensi/{nrp}', [AttendanceController::class, 'showEmployeeAttendance'])->name('dashboard.attendances.showEmployeeAttendance');
+    Route::post('/kelola-presensi/{nrp}/tambah', [AttendanceController::class, 'storeEmployeeAttendance'])->name('dashboard.attendances.storeEmployeeAttendance');
+    Route::put('/kelola-presensi/{nrp}/{attendanceId}', [AttendanceController::class, 'updateEmployeeAttendance'])->name('dashboard.attendances.updateEmployeeAttendance');
 });

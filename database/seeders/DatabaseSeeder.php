@@ -21,8 +21,19 @@ class DatabaseSeeder extends Seeder
             ];
 
             if ($index === 0) {
+                $employee->update([
+                    'name' => 'Joysen Mewengkang',
+                    'gender' => 'Pria',
+                    'position' => 'Mahasiswa',
+                    'picture' => null,
+                    'status' => true,
+                ]);
+            }
+
+            if ($index === 0) {
                 $userData['name'] = 'admin';
                 $userData['email'] = 'admin@poldasulut.com';
+                $userData['role'] = 'Admin';
             }
 
             User::factory()->create($userData);

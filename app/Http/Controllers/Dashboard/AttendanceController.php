@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use Carbon\Carbon;
+use App\Models\Employee;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -87,5 +88,132 @@ class AttendanceController extends Controller
         }
 
         return redirect()->back()->with('error', 'Anda sudah melakukan check-in dan check-out hari ini.');
+    }
+
+    public function indexEmployeeAttendance(Request $request)
+    {
+        // Validasi Search Form
+        $validated = $request->validate([
+            'status' => 'nullable|string|in:1,0,all',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'search' => 'nullable|string|max:50',
+        ]);
+
+        // Ambil Nilai
+        $status = $validated['status'] ?? 'all';
+        $start_date = $validated['start_date'] ?? null;
+        $end_date = $validated['end_date'] ?? null;
+        $search = $validated['search'] ?? null;
+
+        // Semua Karyawan Dengan Data Berita dan Laporan
+        $employees = Employee::when($search, function ($query, $search) {
+            return $query->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('nrp', 'LIKE', "{$search}%")
+                    ->orWhere('gender', 'LIKE', "{$search}");
+            });
+        })
+            ->when($status !== 'all', function ($query) use ($status) {
+                if (is_numeric($status)) {
+                    return $query->where('status', (bool) $status);
+                }
+            })
+            ->when($start_date, function ($query) use ($start_date) {
+                return $query->whereDate('created_at', '>=', $start_date);
+            })
+            ->when($end_date, function ($query) use ($end_date) {
+                return $query->whereDate('created_at', '<=', $end_date);
+            })
+            ->orderBy('name', 'ASC')
+            ->paginate(10);
+
+        // Judul Halaman
+        $title = "Absensi";
+
+        return view('dashboard.attendance.index-attendance', compact('title', 'employees', 'status', 'start_date', 'end_date', 'search'));
+    }
+
+    public function showEmployeeAttendance(string $nrp)
+    {
+        // Cari karyawan berdasarkan NRP
+        $employee = Employee::where('nrp', $nrp)->firstOrFail();
+
+        // Ambil semua data absensi karyawan ini, diurutkan dari terbaru
+        $attendances = $employee->attendances()->orderBy('date', 'desc')->get();
+
+        // Judul Halaman
+        $title = "Ubah";
+
+        return view('dashboard.attendance.show-attendance', compact('title', 'employee', 'attendances'));
+    }
+
+    public function storeEmployeeAttendance(Request $request, string $nrp)
+    {
+        $employee = Employee::where('nrp', $nrp)->firstOrFail();
+
+        $validated = $request->validate([
+            'date' => 'required|date',
+            'check_in' => 'nullable|date_format:H:i',
+            'check_out' => 'nullable|date_format:H:i',
+        ]);
+
+        // Konversi ke format TIME MySQL
+        $checkIn = $validated['check_in'] ? Carbon::createFromFormat('H:i', $validated['check_in'])->format('H:i:s') : null;
+        $checkOut = $validated['check_out'] ? Carbon::createFromFormat('H:i', $validated['check_out'])->format('H:i:s') : null;
+
+        // Cek apakah sudah ada data absensi untuk karyawan & tanggal yang sama
+        $existingAttendance = Attendance::where('employee_id', $employee->id)
+            ->where('date', $validated['date'])
+            ->first();
+
+        if ($existingAttendance) {
+            return back()->with('error', 'Karyawan ini sudah memiliki absensi pada tanggal ini!');
+        }
+
+        Attendance::create([
+            'employee_id' => $employee->id,
+            'date' => $validated['date'],
+            'check_in' => $checkIn,
+            'check_out' => $checkOut,
+        ]);
+
+        return back()->with('success', 'Absensi berhasil ditambahkan!');
+    }
+
+    public function updateEmployeeAttendance(Request $request, string $nrp, string $attendanceId)
+    {
+        $employee = Employee::where('nrp', $nrp)->firstOrFail();
+        $attendance = Attendance::where('id', $attendanceId)
+            ->where('employee_id', $employee->id)
+            ->firstOrFail();
+
+        $validated = $request->validate([
+            'date' => 'required|date',
+            'check_in' => 'nullable|date_format:H:i',
+            'check_out' => 'nullable|date_format:H:i',
+        ]);
+
+        // Konversi format TIME agar sesuai dengan database
+        $checkIn = $validated['check_in'] ? Carbon::createFromFormat('H:i', $validated['check_in'])->format('H:i:s') : null;
+        $checkOut = $validated['check_out'] ? Carbon::createFromFormat('H:i', $validated['check_out'])->format('H:i:s') : null;
+
+        // Cek apakah ada absensi lain dengan tanggal yang sama (kecuali yang sedang di-update)
+        $existingAttendance = Attendance::where('employee_id', $employee->id)
+            ->where('date', $validated['date'])
+            ->where('id', '!=', $attendanceId) // Exclude current attendance
+            ->first();
+
+        if ($existingAttendance) {
+            return back()->with('error', 'Karyawan ini sudah memiliki absensi pada tanggal ini!');
+        }
+
+        $attendance->update([
+            'date' => $validated['date'],
+            'check_in' => $checkIn,
+            'check_out' => $checkOut,
+        ]);
+
+        return back()->with('success', 'Absensi berhasil diperbarui!');
     }
 }
